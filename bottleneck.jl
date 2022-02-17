@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.5
+# v0.17.7
 
 using Markdown
 using InteractiveUtils
@@ -7,23 +7,27 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
 
+# ╔═╡ 906d72ef-2860-41ef-abd0-a24dd295f2c4
+using Pkg; Pkg.activate()
+
 # ╔═╡ 162029e0-9c77-11eb-1937-69fb4af41087
 begin
 	using LinearAlgebra
-	using LightGraphs
-	using GraphRecipes
 	using Plots
+	using Graphs
+	using GraphRecipes
 	using LaTeXStrings
 	using PlutoUI
 end
 
-# ╔═╡ 84fe8c10-3715-4c94-8a59-7aa87ba50ff7
+# ╔═╡ 65d2548d-22bf-4ed9-8173-9e6304f9ec36
 pyplot()
 
 # ╔═╡ d087a3f9-f88a-43ef-828e-e269039fdc45
@@ -54,13 +58,13 @@ h_(n; normalize=true) = x -> h_exact(n,x, normalize=normalize)
 
 # ╔═╡ 782234ec-7ff1-4835-b3e3-d76aa32bfbc4
 begin
-	g = cycle_digraph(M)
+	g = Graphs.cycle_digraph(M)
 	A = Array{Float64}(adjacency_matrix(g));
 end
 
 # ╔═╡ 3db7c5d9-f362-41af-b4f5-2dd8957ef981
 begin
-	local labels = Dict((5,1)=> L"\varepsilon")
+	local labels = Dict((nv(g),1)=> L"\varepsilon")
 	graphplot(g, 
 		edgelabel=labels,
 		fontsize=12,
@@ -189,8 +193,9 @@ begin
 end
 
 # ╔═╡ Cell order:
+# ╠═906d72ef-2860-41ef-abd0-a24dd295f2c4
 # ╠═162029e0-9c77-11eb-1937-69fb4af41087
-# ╠═84fe8c10-3715-4c94-8a59-7aa87ba50ff7
+# ╠═65d2548d-22bf-4ed9-8173-9e6304f9ec36
 # ╠═d087a3f9-f88a-43ef-828e-e269039fdc45
 # ╠═782234ec-7ff1-4835-b3e3-d76aa32bfbc4
 # ╠═3db7c5d9-f362-41af-b4f5-2dd8957ef981
